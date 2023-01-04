@@ -1,0 +1,27 @@
+{
+  "name": "labecommerce-backend",
+  "version": "1.0.0",
+  "description": "Back-end de e-commerce desenvolvido no bootcamp da Labenu.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc && node ./build/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitorfontenele/labecommerce-backend.git"
+  },
+  "keywords": [
+    "Node"
+  ],
+  "author": "Vitor Fontenele",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vitorfontenele/labecommerce-backend/issues"
+  },
+  "homepage": "https://github.com/vitorfontenele/labecommerce-backend#readme",
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "typescript": "^4.9.4"
+  }
+}
