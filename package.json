@@ -1,27 +1,36 @@
 {
-  "name": "labecommerce-backend",
+  "name": "kebab-case",
   "version": "1.0.0",
-  "description": "Back-end de e-commerce desenvolvido no bootcamp da Labenu.",
+  "description": "Task Labecommerce do bootCamp da Labenu",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc && node ./build/index.js"
+    "start": "tsc && node ./build/index.js",
+    "dev": "ts-node-dev src/index.ts"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vitorfontenele/labecommerce-backend.git"
+    "url": "git+https://github.com/Afmjuniors/labecommerce-backend.git"
   },
   "keywords": [
-    "Node"
+    "ecommerce",
+    "labenu",
+    "backend"
   ],
-  "author": "Vitor Fontenele",
+  "author": "Alexandre Machado",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/vitorfontenele/labecommerce-backend/issues"
+    "url": "https://github.com/Afmjuniors/labecommerce-backend/issues"
   },
-  "homepage": "https://github.com/vitorfontenele/labecommerce-backend#readme",
+  "homepage": "https://github.com/Afmjuniors/labecommerce-backend#readme",
   "devDependencies": {
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.15",
     "@types/node": "^18.11.18",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
   }
 }
