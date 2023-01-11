@@ -1,2 +1,1 @@
-# Labenu---labecommerce-backend
-Exercício backend labenu
+# labecommerce-backend
