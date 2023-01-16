@@ -47,43 +47,31 @@ export const purchaseHistory: TPurchase[] = [
     },
 ]
 
-export function getAllUsers () : Array<TUser>{
-    
-    return users 
+export function getAllUsers(): Array<TUser> {
+    return users
+}
+
+export function getUserById(id: string) {
+    const user = users.find((user) => user.id === id)
+    return user
+}
+
+export function getAllProducts(): Array<TProduct> {
+    return products
+}
+
+export function getProductById(id: string) {
+    return products.find((product) => product.id === id)
 }
 
 
-
-export function getAllProducts () : Array<TProduct>{
-    
-    return products 
-}
-
-export function getProductById (id:string): Array<TProduct>{
-    return products.filter((product:TProduct) => product.id===id)
-
+export function queryProductsByName(q: string): Array<TProduct> {
+    return products.filter((product: TProduct) => {
+        return product.name.toLowerCase().includes(q.toLowerCase())
+    })
 }
 
 
-export function queryProductsByName (q:string) : Array<TProduct>{
-return products.filter((product:TProduct)=>{
-    return product.name.toLowerCase().includes(q.toLowerCase())
-})
-}
-
-
-export function createPurchase (userId:string, productId:string,quantity:number, totalPrice:number):void{
-const newPurchase: TPurchase={
-    userId,
-    productId,
-    quantity,
-    totalPrice
-}
-
-
-    console.log("Compra realaizada com sucesso")
-}
-
-export function getAllPurchasesFromUserId(userId:string):Array<TPurchase>{
-    return purchaseHistory.filter((purchase)=> purchase.userId===userId)
+export function getAllPurchasesFromUserId(userId: string): Array<TPurchase> {
+    return purchaseHistory.filter((purchase) => purchase.userId === userId)
 }
