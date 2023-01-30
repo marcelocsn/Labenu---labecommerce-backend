@@ -17,18 +17,14 @@ VALUES
 ("u03","c@gmail.com","1b@A");
 
 UPDATE users SET password="1" WHERE id='u03';
-
 DELETE FROM users WHERE id='u01';
-
 CREATE TABLE products (
     id TEXT PRIMARY KEY UNIQUE NOT NULL,
     name TEXT NOT NULL,
     price REAL NOT NULL,
     category TEXT NOT NULL
 );
-
 SELECT * FROM products;
-
 INSERT INTO products (id,name,price,category)
 VALUES('p01','produto 1',10.1,'Eletrônicos');
 INSERT INTO products (id,name,price,category)
