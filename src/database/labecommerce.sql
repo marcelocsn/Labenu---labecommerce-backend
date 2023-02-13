@@ -104,17 +104,13 @@ WHERE id="a06";
 DELETE FROM products
 WHERE id = "a006";
 
-
-
 -- mocke valores para editar um user
 -- edite a linha baseada nos valores mockados
 UPDATE users SET email="mariar@gmail.com", password="mariar1" WHERE id="a001";
 
-
 -- mocke valores para editar um product
 -- edite a linha baseada nos valores mockados
 UPDATE products SET price=1055.99 WHERE id="a02";
-
 
 --exercicio 3
 -- retorna o resultado ordenado pela coluna email em ordem crescente
@@ -126,7 +122,6 @@ ORDER BY email asc;
 
 SELECT * FROM products
 ORDER BY price asc LIMIT 20;
-
 
 -- PRODUCTS mocke um intervalo de preços, por exemplo entre 100.00 e 300.00
 -- retorna os produtos com preços dentro do intervalo mockado em ordem crescente

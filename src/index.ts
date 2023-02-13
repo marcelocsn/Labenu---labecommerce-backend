@@ -77,46 +77,205 @@ app.get("/product/search", async (req: Request, res: Response) => {
   }
 });
 
-//Criando novo usuário
-//validar o body
-// extra:
-// não deve ser possível criar mais de uma conta com a mesma id
-// não deve ser possível criar mais de uma conta com o mesmo e-mail
-app.post("/users", (req: Request, res: Response) => {
+/// Create User
+app.post("/users", async (req: Request, res: Response) => {
   try {
-    const id = req.body.id;
-    const email = req.body.email;
-    const password = req.body.password;
-    const findId = users.find((user) => user.id === id);
+      // destructuring para pegar info que vem do body
+      const { id, name, email, password } = req.body;
 
-    if (findId) {
-      res.status(400);
-      throw new Error("ID indisponivel");
-    }
+      // id precisa existir e ser uma string
+      if (typeof id !== "string"){
+          res.status(400);
+          throw new Error ("'id' deve existir e ser uma string");
+      }
+      // user precisa ter id único
+      const idMatches : TUserDB[] = await db("users").where({ id });
+      if (idMatches.length > 0){
+          res.status(400);
+          throw new Error ("Já existe um usuário com esse 'id'");
+      }
+      // id do user precisa ter no mínimo 4 caracteres
+      if (id.length < 4){
+          res.status(400);
+          throw new Error ("'id' precisa ter no mínimo 4 caracteres");
+      }
 
-    const findEmail = users.find((user) => user.email === email);
+      // name precisa existir e ser uma string
+      if (typeof name !== "string"){
+          res.status(400);
+          throw new Error ("'name' deve existir e ser uma string"); 
+      }
+      // name precisa ter no mínimo 2 caracteres
+      if (name.length < 2){
+          res.status(400);
+          throw new Error ("'name' precisa ter no mínimo 2 caracteres");
+      }
 
-    if (findEmail) {
-      res.status(400);
-      throw new Error("EMAIL indisponivel");
-    }
+      // email precisa existir e ser uma string
+      if (typeof email !== "string"){
+          res.status(400);
+          throw new Error ("'email' deve existir e ser uma string");
+      }
+      // email precisa ser único
+      const emailMatches : TUserDB[] = await db("users").where({ email });
+      if (emailMatches.length > 0){
+          res.status(400);
+          throw new Error ("Já existe um usuário com esse 'email'");
+      }
+      // email deve ter formato de email
+      if (!emailRegex.test(email)){
+          res.status(400);
+          throw new Error ("'email' deve ter formato de e-mail");
+      }
 
-    const newUser: TUser = {
-      id,
-      email,
-      password,
-    };
+      // password precisa existir e ser uma string
+      if (typeof password !== "string"){
+          res.status(400);
+          throw new Error ("'password' deve existir e ser uma string");
+      }
+      // password deve ter entre 4 e 8 dígitos e incluir pelo menos um dígito numérico
+      if (!passwordRegex.test(password)){
+          res.status(400);
+          throw new Error ("password deve ter entre 4 e 8 dígitos e incluir pelo menos um dígito numérico");
+      }
 
-    users.push(newUser);
-    res.status(201).send("Usuario criado com sucesso 😎");
-  } catch (error: any) {
-    console.log(error);
+      // novo usuário a ser inserido
+      const newUser = {
+          id,
+          name, 
+          email, 
+          password
+      }
 
-    if (res.statusCode === 200) {
-      res.status(500);
-    }
+      // query para inserir o novo usuário
+      await db("users").insert(newUser);
+      
+      res.status(201).send({
+          message: "Cadastro realizado com sucesso",
+          user: newUser
+      }); 
+  } catch (error) {
+      console.log(error);
 
-    res.send(error.message);
+      if (req.statusCode === 200) {
+          res.status(500);
+      }
+
+      if (error instanceof Error) {
+          res.send(error.message);
+      } else {
+          res.send("Erro inesperado");
+      }
+  }
+});
+// Create Product
+app.post("/products", async (req: Request, res: Response) => {
+  try {
+      // destructuring para pegar info que vem do body
+      const { id, name, price, description, imageUrl } = req.body;
+      const category = req.body.category as PRODUCT_CATEGORY;
+
+      // id precisa existir e ser uma string
+      if (typeof id !== "string"){
+          res.status(400);
+          throw new Error ("'id' deve existir e ser uma string");
+      }
+      // product precisa ter id único
+      const idMatches : TProductDB[] = await db("products").where({ id });
+      if (idMatches.length > 0){
+          res.status(400);
+          throw new Error ("Já existe um 'product' com esse 'id'");
+      }
+      // id do product precisa ter no mínimo 7 caracteres
+      if (id.length < 7){
+          res.status(400);
+          throw new Error ("'id' precisa ter no mínimo 7 caracteres");
+      }
+
+      // name precisa existir e ser uma string
+      if (typeof name !== "string"){
+          res.status(400);
+          throw new Error ("'name' deve existir e ser uma string"); 
+      }
+      // name precisa ter no mínimo 2 caracteres
+      if (name.length < 2){
+          res.status(400);
+          throw new Error ("'name' precisa ter no mínimo 2 caracteres");
+      }
+
+      // price precisa existir e ser um number
+      if (typeof price !== "number"){
+          res.status(400);
+          throw new Error ("'price' deve existir e ser um number");
+      }
+      // price precisa ser maior do que zero
+      if (price <= 0){
+          res.status(400);
+          throw new Error ("'price' deve ser maior do que zero");
+      }
+
+      // description precisa existir e ser uma string
+      if (typeof description !== "string"){
+          res.status(400);
+          throw new Error ("'description' deve existir e ser uma string");
+      }
+      // description precisa ter no mínimo 2 caracteres
+      if (description.length < 2){
+          res.status(400);
+          throw new Error ("'description' deve ter no mínimo 2 caracteres");
+      }
+
+      // imageUrl precisa existir e ser uma string
+      if (typeof imageUrl !== "string"){
+          res.status(400);
+          throw new Error ("'imageUrl' deve existir e ser uma string");
+      }
+      // URLs podem ter muitos formatos. Fica pendente ver se vale alguma outra verificação
+
+      // category precisa existir e ser uma string
+      if (typeof category !== "string"){
+          res.status(400);
+          throw new Error ("'category' deve existir e ser uma string");
+      }
+      // produto deve ter uma das categorias existentes
+      if (
+          category !== "Acessories" &&
+          category !== "Clothes and Shoes" &&
+          category !== "Electronics"
+      ){
+          res.status(400);
+          throw new Error ("Produto deve ter uma categoria existente");
+      }
+      
+      // novo produto a ser inserido
+      const newProduct : TProductDB = {
+          id,
+          name,
+          price,
+          description,
+          image_url: imageUrl,
+          category
+      };
+
+      // query para inserir o novo produto
+      await db("products").insert(newProduct);
+
+      res.status(201).send({
+          message: "Produto cadastrado com sucesso",
+          product: newProduct
+      });
+  } catch (error) {
+      console.log(error);
+
+      if (req.statusCode === 200) {
+          res.status(500);
+      }
+
+      if (error instanceof Error) {
+          res.send(error.message);
+      } else {
+          res.send("Erro inesperado");
+      }
   }
 });
 
